@@ -1010,7 +1010,7 @@ if (document.getElementById('gc-hackathon-new-bounty')) {
           amount: 0.001,
           amountusd: null,
           peg_to_usd: true,
-          token: {},
+          token: null,
           terms: false,
           termsPrivacy: false,
           feeTxId: null,
