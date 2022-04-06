@@ -1,5 +1,5 @@
 {% load i18n %}
-<form-wrapper v-if="step === 1" :heading="'Review Bounty'" :current-step="step" :total-steps="currentSteps.length"
+<form-wrapper v-if="step === 5" :heading="'Review Bounty'" :current-step="step" :total-steps="currentSteps.length"
   @update-navigation="updateNav">
 
   <!-- Bounty Information -->
@@ -82,50 +82,56 @@
         </time>
       </div>
 
-      <!-- <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-between">
+      <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-between">
         <span class="bounty-info-heading">{% trans "Opened" %} </span>
-        <time class="bounty-info-text pr-sm-3 pr-md-5" :datetime="bounty.web3_created"
-          :title="bounty.web3_created | momentFormat" id="web3_created">
-          [[ bounty.web3_created | moment ]]
+        <time class="bounty-info-text pr-sm-3 pr-md-5" :datetime="''"
+          :title="'Now'" id="web3_created">
+          Now
         </time>
-      </div> -->
-      <!-- <div v-if="bounty.bounty_type" class="col-12 col-sm-6 col-md-4 d-flex justify-content-between">
-        <span class="bounty-info-heading">{% trans "Issue Type" %} </span>
-        <span class="bounty-info-text pr-sm-3 pr-md-5" id="bounty_type">[[ bounty.bounty_type ]]</span>
-      </div> -->
+      </div>
 
-      <!-- <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-between" id="auto_approve_workers_wrapper"
-        v-if="bounty.permission_type === 'approval'">
+      <div v-if="form.bounty_type" class="col-12 col-sm-6 col-md-4 d-flex justify-content-between">
+        <span class="bounty-info-heading">{% trans "Issue Type" %} </span>
+        <span class="bounty-info-text pr-sm-3 pr-md-5" id="bounty_type">[[ form.bounty_type ]]</span>
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-between" id="auto_approve_workers_wrapper"
+        v-if="form.permission_type === 'approval'">
+        <!-- TODO geri: where is the autoapprove input field ??? -->
         <span class="bounty-info-heading">{% trans "Workers Auto Approve" %} </span>
         <span class="bounty-info-text pr-sm-3 pr-md-5" id="admin_override_suspend_auto_approval">[[
-          bounty.admin_override_suspend_auto_approval ? 'Off' : 'On' ]]</span>
-      </div> -->
-      <!-- <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-between">
+          form.auto_approve_workers ? 'Off' : 'On' ]]</span>
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-between">
         <span class="bounty-info-heading mr-1" data-toggle="tooltip" data-html="true"
           title='{% include "shared/project_type_tooltip.html" %}'>
           {% trans "Project Type" %} <i class="fas fa-info-circle"></i>
         </span>
         <span class="bounty-info-text pr-sm-3 pr-md-5" id="project_type" data-toggle="tooltip" data-html="true"
-          title='{% include "shared/project_type_tooltip.html" %}'>[[ bounty.project_type ]]
+          title='{% include "shared/project_type_tooltip.html" %}'>[[ form.project_type ]]
         </span>
-      </div> -->
+      </div>
 
-      <!-- <div v-if="bounty.project_length" class="col-12 col-sm-6 col-md-4 d-flex justify-content-between"
-        v-if="bounty.project_length">
+      <div v-if="form.project_length" class="col-12 col-sm-6 col-md-4 d-flex justify-content-between"
+        v-if="form.project_length">
         <span class="bounty-info-heading">{% trans "Time Commitment" %}</span>
-        <span class="bounty-info-text pr-sm-3 pr-md-5" id="project_length">[[ bounty.project_length ]]</span>
-      </div> -->
-      <!-- <div v-if="bounty.experience_level" class="col-12 col-sm-6 col-md-4 d-flex justify-content-between">
+        <span class="bounty-info-text pr-sm-3 pr-md-5" id="project_length">[[ form.project_length ]]</span>
+      </div>
+
+      <div v-if="form.experience_level" class="col-12 col-sm-6 col-md-4 d-flex justify-content-between">
         <span class="bounty-info-heading">{% trans "Experience Level" %} </span>
-        <span class="bounty-info-text pr-sm-3 pr-md-5" id="experience_level">[[ bounty.experience_level ]]</span>
-      </div> -->
-      <!-- <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-between">
+        <span class="bounty-info-text pr-sm-3 pr-md-5" id="experience_level">[[ form.experience_level ]]</span>
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-between">
         <span class="bounty-info-heading" data-toggle="tooltip" data-html="true"
           title='{% include "shared/permissions_type_tooltip.html" %}'>{% trans "Permissions" %} <i
             class="fas fa-info-circle"></i></span>
         <span class="bounty-info-text pr-sm-3 pr-md-5" id="permission_type" data-toggle="tooltip" data-html="true"
-          title='{% include "shared/permissions_type_tooltip.html" %}'>[[ bounty.permission_type ]]</span>
-      </div> -->
+          title='{% include "shared/permissions_type_tooltip.html" %}'>[[ form.permission_type ]]</span>
+      </div>
+
       <!-- <div id="fulfillment_accepted_on_wrapper" class="col-12 col-sm-6 col-md-4 d-flex justify-content-between"
         v-if="bounty.fulfillment_accepted_on">
         <span class="bounty-info-heading">{% trans "Accepted" %} </span>
@@ -134,6 +140,7 @@
           [[ bounty.fulfillment_accepted_on | moment ]]
         </time>
       </div> -->
+
       <!-- <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-between" v-if="bounty.reserved_for_user_handle">
         <span class="bounty-info-heading" id="bounty_reserved_for_label">{% trans "Reserved For" %} </span>
         <span class="bounty-info-text pr-sm-3 pr-md-5" id="bounty_reserved_for">[[ bounty.reserved_for_user_handle
