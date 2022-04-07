@@ -749,7 +749,7 @@ Vue.mixin({
       $.when(postBountyData).then((response) => {
         if (200 <= response.status && response.status <= 204) {
           console.log('success', response);
-          // window.location.href = response.bounty_url;  TODO geri: uncomment this
+          window.location.href = response.bounty_url;
         } else if (response.status == 304) {
           _alert('Bounty already exists for this github issue.', 'danger');
           console.error(`error: bounty creation failed with status: ${response.status} and message: ${response.message}`);
