@@ -235,10 +235,17 @@ class Bounty(SuperModel):
     ]
     BOUNTY_TYPES = [
         ('Bug', 'Bug'),
-        ('Security', 'Security'),
+        ('Project', 'Project'),
         ('Feature', 'Feature'),
+        ('Security', 'Security'),
+        ('Improvement', 'Improvement'),
+        ('Design', 'Design'),
+        ('Docs', 'Docs'),
+        ('Code review', 'Code review'),
+        ('Other', 'Other'),
         ('Unknown', 'Unknown'),
     ]
+
     EXPERIENCE_LEVELS = [
         ('Beginner', 'Beginner'),
         ('Intermediate', 'Intermediate'),
