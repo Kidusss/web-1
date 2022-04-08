@@ -14,24 +14,20 @@
           </a> -->
       </div>
       <div class="col-md-10">
-        <!-- TODO: geri do we ned this?
-          <div v-if="bounty.event" class="font-subheader hackathon-alt text-center text-lg-left" id="event_name">
-          Hackathon: [[bounty.event.name]]
-        </div> -->
         <h4 id="title" class="font-title p-0 text-center text-lg-left">[[ form.title ]]</h4>
         <div class="text-center text-lg-left">
           <div class="tags font-caption d-inline-flex d-md-flex">
             <div class="tag token" data-toggle="tooltip" data-html="true"
-              :title='`<div class="tooltip-info">123 TODO geri in funding from original funder.</div>`'>
+              :title='`<div class="tooltip-info">${form.amount} in funding from original funder.</div>`'>
               <p class="inner-tooltip">
                 <span id="value_in_token">123 TODO</span>
               </p>
             </div>
             <div v-if="'bounty.value_in_usdt_now'" id="value_in_usdt_wrapper" class="tag usd ml-3" data-toggle="tooltip"
               data-html="true"
-              :title='`<div class="tooltip-info">The funding in this bounty adds up to $1234 USD TODO geri </div>`'>
+              :title='`<div class="tooltip-info">The funding in this bounty adds up to ${form.amountusd} USD </div>`'>
               <p class="inner-tooltip">
-                <span id="value_in_usdt">1234 USD TODO geri</span>
+                <span id="value_in_usdt">[[form.amountusd]]</span>
                 <span>USD</span>
               </p>
             </div>
