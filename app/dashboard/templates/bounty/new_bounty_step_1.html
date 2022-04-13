@@ -11,6 +11,9 @@
         <p class="m-0 text-center text-grey-500 font-subheader">[[ bountyType ]]</p>
       </label>
     </div>
+    <div class="text-danger" v-if="errors.bounty_type && !bountyType">
+      [[errors.bounty_type]]
+    </div>
   </div>
   <!-- Tags -->
   <div class="mb-4">
@@ -20,12 +23,15 @@
       <template #search="{attributes, events}">
         <input
           class="vs__search"
-          :required="!form.bounty_categories"
+          :required="!form.bounty_categories.length"
           v-bind="attributes"
           v-on="events"
         />
       </template>
     </v-select>
+    <div class="text-danger" v-if="errors.bounty_categories && !form.bounty_categories.length">
+      [[errors.bounty_categories]]
+    </div>
   </div>
   <!-- Experience Level -->
   <div class="mb-4">
@@ -40,6 +46,9 @@
         />
       </template>
     </v-select>
+    <div class="text-danger" v-if="errors.experience_level && !form.experience_level">
+      [[errors.experience_level]]
+    </div>
   </div>
   <!-- Time Commitment -->
   <div class="mb-4">
@@ -54,5 +63,8 @@
         />
       </template>
     </v-select>
+    <div class="text-danger" v-if="errors.project_length && !form.project_length">
+      [[errors.project_length]]
+    </div>
   </div>
 </form-wrapper>

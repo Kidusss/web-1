@@ -26,74 +26,93 @@
           </label>
         </div>
       </div>
-    </div>
-  </div>
-
-  <div class="row ml-0">
-    <div class="new-border-mid col-9 pb-4">
-      <div v-if="form.bountyInformationSource === null" class="pl-0">
-        <!-- GitHub Issue Url -->
-        <div v-if="form.bountyInformationSource === '0'" class="pb-4">
-          <label class="mb-1 font-subheader font-weight-normal letter-spacing">GitHub Issue Url</label>
-          <input class="form-control" id="new-bounty-issue-url" name='issueURL' v-model="form.issueUrl" type="url"
-            placeholder="https://github.com/org/repo/issues/n" @input="getIssueDetails(form.issueUrl)"
-            value="{% if issueURL %}{{ issueURL }}{% endif %}" required />
-        </div>
+      <div class="text-danger" v-if="errors.bountyInformationSource && !form.bountyInformationSource">
+        [[errors.bountyInformationSource]]
       </div>
     </div>
   </div>
 
-  <div v-if="form.bountyInformationSource === '0' && form.issueDetails" class="row new-border-mid pb-4">
+  <div class="row ml-0" v-if="form.bountyInformationSource === '0'">
+    <div class="new-border-mid col-9 pb-4">
+      <div class="pl-0">
+        <!-- GitHub Issue Url -->
+        <label class="mb-1 font-subheader font-weight-normal letter-spacing">GitHub Issue Url</label>
+        <input class="form-control" id="new-bounty-issue-url" name='issueURL' v-model="form.issueUrl" type="url"
+          placeholder="https://github.com/org/repo/issues/n" @input="getIssueDetails(form.issueUrl)"
+          value="{% if issueURL %}{{ issueURL }}{% endif %}" required />
+      </div>
+      <div class="text-danger" v-if="errors.issueDetails && !form.issueUrl">
+        [[errors.issueDetails]]
+      </div>
+    </div>
+  </div>
+
+  <div class="row ml-0" v-if="form.bountyInformationSource === '0' && form.issueDetails">
     <div class="new-border-mid col-9 pb-4">
       <!-- GitHub Issue Title -->
-      <div v-if="form.bountyInformationSource === '0' && form.issueDetails" class="mb-4">
-        <label class="mb-1 font-subheader font-weight-normal letter-spacing">Title</label>
-        <input class="form-control" id="new-bounty-title" name='title' v-model="form.title" :readonly="true" required />
-      </div>
-
-      <!-- GitHub Issue Details -->
-      <div v-if="form.bountyInformationSource === '0' && form.issueDetails" class="mb-4">
-        <label class="mb-1 font-subheader font-weight-normal letter-spacing">Description</label>
-
-        <a class="btn btn-link" :href="form.issueUrl" target="_blank" rel="noopener noreferrer">
-          Edit on Github <i class="far fa-external-link"></i>
-        </a>
-
-        <a class="btn btn-link" @click="getIssueDetails(form.issueUrl)">
-          Resync with GitHub<i class="far fa-sync ml-1"></i>
-        </a>
-
-        <div class="issue_description mb-3" :inner-html.prop="form.issueDetails.description | markdownit"></div>
-      </div>
+      <label class="mb-1 font-subheader font-weight-normal letter-spacing">Title</label>
+      <input class="form-control" id="new-bounty-title" name='title' v-model="form.title" :readonly="true" required />
     </div>
   </div>
 
-  <div v-if="form.bountyInformationSource === '1'"  class="row ml-0">
-    <!-- Custom Bounty Title -->
+  <div class="row ml-0" v-if="form.bountyInformationSource === '0' && form.issueDetails">
     <div class="new-border-mid col-9 pb-4">
-      <label class="mb-1 font-subheader font-weight-normal letter-spacing">Title</label>
-      <input class="form-control" id="new-bounty-custom-title" name='title' v-model="form.title" required />
+      <!-- GitHub Issue Details -->
+      <label class="mb-1 font-subheader font-weight-normal letter-spacing">Description</label>
+
+      <a class="btn btn-link" :href="form.issueUrl" target="_blank" rel="noopener noreferrer">
+        Edit on Github <i class="far fa-external-link"></i>
+      </a>
+
+      <a class="btn btn-link" @click="getIssueDetails(form.issueUrl)">
+        Resync with GitHub<i class="far fa-sync ml-1"></i>
+      </a>
+
+      <div class="issue_description mb-3" :inner-html.prop="form.issueDetails.description | markdownit"></div>
     </div>
   </div>
 
   <div v-if="form.bountyInformationSource === '1'" class="row ml-0">
+    <!-- Custom Bounty Title -->
+    <div class="new-border-mid col-9 pb-4">
+      <label class="mb-1 font-subheader font-weight-normal letter-spacing">Title</label>
+      <input class="form-control" id="new-bounty-custom-title" name='title' v-model="form.title" required />
+      <div class="text-danger" v-if="errors.title && !form.title">
+        [[errors.title]]
+      </div>
+    </div>
+  </div>
+
+  <div class="row ml-0" v-if="form.bountyInformationSource === '1'">
+    <div class="new-border-mid col-9">
+      <!-- Custom Bounty Details Editor -->
+      <div class="pl-0 col-9">
+        <label class="mb-1 font-subheader font-weight-normal letter-spacing">Description</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="row ml-0" v-if="form.bountyInformationSource === '1'">
     <!-- Custom Bounty Details Editor -->
     <div class="new-border-mid col-9 pb-4">
-      <label class="mb-1 font-subheader font-weight-normal letter-spacing">Description</label>
       <quill-editor id="new-bounty-custom-editor" @change="quilUpdated($event)"
-        :class="`editor ${errors.description && !form.description_rich.length ? 'invalid' : ''}`"
+        :class="`editor ${errors.description && !(form.description_rich && form.description_rich.length) ? 'invalid' : ''}`"
         :options="editorOptionPrio" v-model="form.richDescription"></quill-editor>
-    </div>
+        <div class="text-danger" v-if="errors.description && !form.description">
+          [[errors.description]]
+        </div>
+      </div>
 
     <div class="pr-0 col-3">
       <div class="bounty-creation-help p-3">
-        If your bounty is part of a hackathon, you can also put judging criteria, prizes, and partial payout policies here!
+        If your bounty is part of a hackathon, you can also put judging criteria, prizes, and partial payout policies
+        here!
       </div>
     </div>
   </div>
 
   <div class="row ml-0" v-if="form.bountyInformationSource !== null">
-    <div class="new-border-mid col-9 pb-4">
+    <div class="new-border-mid col-9">
       <!-- Acceptance Criteria -->
       <div class="pl-0 col-9">
         <label class="mb-1 font-subheader font-weight-normal letter-spacing">Acceptance Criteria</label>
@@ -164,7 +183,7 @@
 
   <div class="row ml-0" v-if="form.bountyInformationSource !== null">
     <div class="new-border-mid col-9 pb-4">
-    <!-- Show as Organisation -->
+      <!-- Show as Organisation -->
       <label class="mb-1 font-subheader font-weight-normal letter-spacing">Show as Organisation</label>
       <p class="text-muted mb-0">Enter an organization GitHub link to display its logo and name on this bounty</p>
       <input class="form-control" id='new-bounty-organisation-url' name='organisationUrl' v-model="form.organisationUrl"
@@ -177,11 +196,11 @@
   </div>
 
   <div class="d-flex justify-content-center navigation">
-    <button :aria-disabled="step === 1" :disabled="step === 1" type="button" @click="updateNav(-1)">
+    <button type="button" @click="updateNav(-1)">
       <i class="text-primary pr-2 fa fa-arrow-left"></i> Back
     </button>
-    <button type="button" :aria-disabled="disableConfirm" :disabled="disableConfirm" @click="updateNav(1)">
-      [[ step === 5 ? 'Confirm' : 'Next']] <i class="text-primary pl-2 fa fa-arrow-right"></i>
+    <button type="button" @click="updateNav(1)">
+      Next <i class="text-primary pl-2 fa fa-arrow-right"></i>
     </button>
   </div>
 </div>

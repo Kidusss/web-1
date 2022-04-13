@@ -193,7 +193,7 @@ Vue.mixin({
         }
 
         vm.form.issueDetails = response;
-        
+
         let md = window.markdownit();
 
         vm.form.richDescription = md.render(vm.form.issueDetails.description);
@@ -277,43 +277,75 @@ Vue.mixin({
       vm.submitted = true;
       vm.errors = {};
 
-      if (!vm.form.keywords.length) {
-        vm.$set(vm.errors, 'keywords', 'Please select the prize keywords');
+      // TODO geri do we still have this?
+      // if (!vm.form.keywords.length) {
+      //   vm.$set(vm.errors, 'keywords', 'Please select the prize keywords');
+      // }
+      if (!vm.form.experience_level) {
+        vm.$set(vm.errors, 'experience_level', 'Please select the experience level');
       }
-      if (!vm.form.experience_level || !vm.form.project_length || !vm.form.bounty_type) {
-        vm.$set(vm.errors, 'experience_level', 'Please select the details options');
+      if (!vm.form.project_length) {
+        vm.$set(vm.errors, 'project_length', 'Please select the project length');
       }
+      if (!vm.form.bounty_type) {
+        vm.$set(vm.errors, 'bounty_type', 'Please select the bounty type');
+      }
+
+
+      if (!vm.form.bountyInformationSource) {
+        vm.$set(vm.errors, 'bountyInformationSource', 'Select the bounty information source');
+      } else if (vm.form.bountyInformationSource === '0') {
+        if (!vm.form.issueDetails || vm.form.issueDetails < 1) {
+          vm.$set(vm.errors, 'issueDetails', 'Please input a GitHub issue');
+        }
+      } else {
+        if (!vm.form.title) {
+          vm.$set(vm.errors, 'title', 'Please input bounty title');
+        }
+
+        if (!vm.form.description) {
+          vm.$set(vm.errors, 'description', 'Please input bounty description');
+        }
+      }
+
       if (!vm.chainId) {
         vm.$set(vm.errors, 'chainId', 'Please select an option');
       }
-      if (!vm.form.issueDetails || vm.form.issueDetails < 1) {
-        vm.$set(vm.errors, 'issueDetails', 'Please input a GitHub issue');
-      }
+      // TODO geri rework this
+      // if (!vm.form.issueDetails || vm.form.issueDetails < 1) {
+      //   vm.$set(vm.errors, 'issueDetails', 'Please input a GitHub issue');
+      // }
       if (vm.form.bounty_categories.length < 1) {
         vm.$set(vm.errors, 'bounty_categories', 'Select at least one category');
       }
-      if (!vm.form.funderAddress) {
-        vm.$set(vm.errors, 'funderAddress', 'Fill the owner wallet address');
-      }
-      if (!vm.validateFunderAddress()) {
-        vm.$set(vm.errors, 'funderAddress', `Please enter a valid ${vm.form.token.symbol} address`);
-      }
+      // TODO geri remove this
+      // if (!vm.form.funderAddress) {
+      //   vm.$set(vm.errors, 'funderAddress', 'Fill the owner wallet address');
+      // }
+      // if (!vm.validateFunderAddress()) {
+      //   vm.$set(vm.errors, 'funderAddress', `Please enter a valid ${vm.form.token.symbol} address`);
+      // }
       if (!vm.form.project_type) {
         vm.$set(vm.errors, 'project_type', 'Select the project type');
       }
       if (!vm.form.permission_type) {
         vm.$set(vm.errors, 'permission_type', 'Select the permission type');
       }
-      if (!vm.form.terms) {
-        vm.$set(vm.errors, 'terms', 'You need to accept the terms');
-      }
-      if (!vm.form.termsPrivacy) {
-        vm.$set(vm.errors, 'termsPrivacy', 'You need to accept the terms');
-      }
-      return true; // TODO: geri hardcoded - remove this and uncomment the lines below
-      // if (Object.keys(vm.errors).length) {
-      //   return false;
+      // TODO geri assk Chase & Will
+      // if (!vm.form.terms) {
+      //   vm.$set(vm.errors, 'terms', 'You need to accept the terms');
       // }
+      // TODO geri assk Chase & Will
+      // if (!vm.form.termsPrivacy) {
+      //   vm.$set(vm.errors, 'termsPrivacy', 'You need to accept the terms');
+      // }
+
+      // TODO geri: rmeove logs
+      console.log('Validation errors: ', vm.errors);
+
+      if (Object.keys(vm.errors).length) {
+        return false;
+      }
     },
     web3Type() {
       let vm = this;
@@ -648,16 +680,15 @@ Vue.mixin({
         return false;
       }
 
-      // TODO geri: removed just for testing
-      // if (Object.keys(vm.errors).length) {
-      //   return false;
-      // }
-      // if (vm.bountyFee > 0 && !vm.subscriptionActive) {
-      //   await vm.payFees();
-      // }
-      // if (vm.form.featuredBounty && !vm.subscriptionActive) {
-      //   await vm.payFeaturedBounty();
-      // }
+      if (Object.keys(vm.errors).length) {
+        return false;
+      }
+      if (vm.bountyFee > 0 && !vm.subscriptionActive) {
+        await vm.payFees();
+      }
+      if (vm.form.featuredBounty && !vm.subscriptionActive) {
+        await vm.payFeaturedBounty();
+      }
 
       console.log('geri - submitForm 3');
       const metadata = {
@@ -765,6 +796,7 @@ Vue.mixin({
 
     },
     updateNav: function(direction) {
+      console.log('geri updateNav ', direction, this.step, this.currentSteps.length);
       if (direction === 1) {
         // Forward navigation
         if (this.step === this.currentSteps.length) {
@@ -1035,7 +1067,7 @@ if (document.getElementById('gc-hackathon-new-bounty')) {
             toolbar: [
               [ 'bold', 'italic', 'underline' ],
               [{ 'align': [] }],
-              [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+              [{ 'list': 'ordered' }, { 'list': 'bullet' }],
               [ 'link', 'code-block' ],
               ['clean']
             ]
