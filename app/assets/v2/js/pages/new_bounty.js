@@ -283,9 +283,15 @@ Vue.mixin({
         if (!vm.form.project_length) {
           ret['project_length'] = 'Please select the project length';
         }
+
         if (!vm.form.bounty_type) {
           ret['bounty_type'] = 'Please select the bounty type';
+        } else if (vm.form.bounty_type === 'Other') {
+          if (!vm.form.bounty_type_other) {
+            ret['bounty_type_other'] = 'Please describe your bounty type';
+          }
         }
+        
         if (vm.form.bounty_categories.length < 1) {
           ret['bounty_categories'] = 'Select at least one category';
         }
@@ -751,20 +757,21 @@ Vue.mixin({
       vm.checkForm();
 
       console.log('geri - submitForm 2');
-      if (!provider && vm.chainId === '1') {
-        onConnect();
-        return false;
-      }
+      // TODO: geri: I think this can be removed?
+      // if (!provider && vm.chainId === '1') {
+      //   onConnect();
+      //   return false;
+      // }
 
-      if (Object.keys(vm.errors).length) {
-        return false;
-      }
-      if (vm.bountyFee > 0 && !vm.subscriptionActive) {
-        await vm.payFees();
-      }
-      if (vm.form.featuredBounty && !vm.subscriptionActive) {
-        await vm.payFeaturedBounty();
-      }
+      // if (Object.keys(vm.errors).length) {
+      //   return false;
+      // }
+      // if (vm.bountyFee > 0 && !vm.subscriptionActive) {
+      //   await vm.payFees();
+      // }
+      // if (vm.form.featuredBounty && !vm.subscriptionActive) {
+      //   await vm.payFeaturedBounty();
+      // }
 
       console.log('geri - submitForm 3');
       const metadata = {
