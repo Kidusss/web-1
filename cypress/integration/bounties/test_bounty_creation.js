@@ -37,12 +37,12 @@ describe('Creating a new bounty', { tags: ['bounties'] }, () => {
 
     // Screen 1
     cy.contains('Feature').click();
-    cy.get('#bounty_tags').find('.vs__search').click();
 
     let tags = [ 'Python', 'Lua', 'Web Assembly' ];
 
     tags.forEach(tag => {
       if (tag === 'Python') {
+        cy.get('#bounty_tags').find('.vs__search').click();
         cy.contains(tag).click();
       } else {
         cy.get('#bounty_tags').find('.vs__search').type(tag + '{enter}');
@@ -146,9 +146,8 @@ describe('Creating a new bounty', { tags: ['bounties'] }, () => {
 
   describe('Verify bounty field validation', () => {
     /*
- * Screen 1
- */
-
+     * Screen 1
+     */
     it('Should validated the mandatory fields on screen 1 ', () => {
       cy.visit('bounty/new');
       cy.wait(1000);
@@ -164,27 +163,64 @@ describe('Creating a new bounty', { tags: ['bounties'] }, () => {
     });
 
     /*
- * Screen 2 - Initial
- */
+     * Screen 1 - Other Bounty
+     */
+    it('Should validated the mandatory fields on screen 1 ', () => {
+      cy.visit('bounty/new');
+      cy.wait(1000);
 
+      // Screen 1
+      cy.contains('Other').click();
+      cy.get('#new-bounty-type-other').should('be.visible');
+
+      cy.contains('Next').click();
+
+      cy.contains('Please describe your bounty type').should('be.visible');
+      cy.contains('Select at least one category').should('be.visible');
+      cy.contains('Please select the experience level').should('be.visible');
+      cy.contains('Please select the project length').should('be.visible');
+
+
+      let tags = [ 'Python', 'Lua', 'Web Assembly' ];
+
+      tags.forEach(tag => {
+        if (tag === 'Python') {
+          cy.get('#bounty_tags').find('.vs__search').click();
+          cy.contains(tag).click();
+        } else {
+          cy.get('#bounty_tags').find('.vs__search').type(tag + '{enter}');
+        }
+      });
+
+      cy.get('#new-bounty-type-other').type('MyBountyType');
+      cy.get('#experience_level').find('.vs__search').click().type('Beginner{enter}');
+      cy.get('#project_length').find('.vs__search').click().type('Hours{enter}');
+
+      cy.contains('Next').click();
+      cy.contains('Step 2 of 5').should('be.visible');
+
+    });
+
+    /*
+     * Screen 2 - Initial
+     */
     it('Should validated that bounty information source was selected on screen 2 ', () => {
       cy.visit('bounty/new');
       cy.wait(1000);
 
       // Screen 1
       cy.contains('Feature').click();
-      cy.get('#bounty_tags').find('.vs__search').click();
 
       let tags = [ 'Python', 'Lua', 'Web Assembly' ];
 
       tags.forEach(tag => {
         if (tag === 'Python') {
+          cy.get('#bounty_tags').find('.vs__search').click();
           cy.contains(tag).click();
         } else {
           cy.get('#bounty_tags').find('.vs__search').type(tag + '{enter}');
         }
       });
-      cy.get('#bounty_tags').find('.vs__search').click();
 
       cy.get('#experience_level').find('.vs__search').click();
       cy.contains('Beginner').click();
@@ -209,23 +245,20 @@ describe('Creating a new bounty', { tags: ['bounties'] }, () => {
 
       // Screen 1
       cy.contains('Feature').click();
-      cy.get('#bounty_tags').find('.vs__search').click();
 
       let tags = [ 'Python', 'Lua', 'Web Assembly' ];
 
       tags.forEach(tag => {
         if (tag === 'Python') {
+          cy.get('#bounty_tags').find('.vs__search').click();
           cy.contains(tag).click();
         } else {
           cy.get('#bounty_tags').find('.vs__search').type(tag + '{enter}');
         }
       });
-      cy.get('#bounty_tags').find('.vs__search').click();
 
-      cy.get('#experience_level').find('.vs__search').click();
-      cy.contains('Beginner').click();
-      cy.get('#project_length').find('.vs__search').click();
-      cy.contains('Hours').click();
+      cy.get('#experience_level').find('.vs__search').click().type('Beginner{enter}');
+      cy.get('#project_length').find('.vs__search').click().type('Hours{enter}');
 
       cy.contains('Next').click();
 
@@ -246,18 +279,17 @@ describe('Creating a new bounty', { tags: ['bounties'] }, () => {
 
       // Screen 1
       cy.contains('Feature').click();
-      cy.get('#bounty_tags').find('.vs__search').click();
 
       let tags = [ 'Python', 'Lua', 'Web Assembly' ];
 
       tags.forEach(tag => {
         if (tag === 'Python') {
+          cy.get('#bounty_tags').find('.vs__search').click();
           cy.contains(tag).click();
         } else {
           cy.get('#bounty_tags').find('.vs__search').type(tag + '{enter}');
         }
       });
-      cy.get('#bounty_tags').find('.vs__search').click();
 
       cy.get('#experience_level').find('.vs__search').click();
       cy.contains('Beginner').click();
@@ -284,18 +316,17 @@ describe('Creating a new bounty', { tags: ['bounties'] }, () => {
 
       // Screen 1
       cy.contains('Feature').click();
-      cy.get('#bounty_tags').find('.vs__search').click();
 
       let tags = [ 'Python', 'Lua', 'Web Assembly' ];
 
       tags.forEach(tag => {
         if (tag === 'Python') {
+          cy.get('#bounty_tags').find('.vs__search').click();
           cy.contains(tag).click();
         } else {
           cy.get('#bounty_tags').find('.vs__search').type(tag + '{enter}');
         }
       });
-      cy.get('#bounty_tags').find('.vs__search').click();
 
       cy.get('#experience_level').find('.vs__search').click();
       cy.contains('Beginner').click();
@@ -343,18 +374,17 @@ describe('Creating a new bounty', { tags: ['bounties'] }, () => {
 
       // Screen 1
       cy.contains('Feature').click();
-      cy.get('#bounty_tags').find('.vs__search').click();
 
       let tags = [ 'Python', 'Lua', 'Web Assembly' ];
 
       tags.forEach(tag => {
         if (tag === 'Python') {
+          cy.get('#bounty_tags').find('.vs__search').click();
           cy.contains(tag).click();
         } else {
           cy.get('#bounty_tags').find('.vs__search').type(tag + '{enter}');
         }
       });
-      cy.get('#bounty_tags').find('.vs__search').click();
 
       cy.get('#experience_level').find('.vs__search').click();
       cy.contains('Beginner').click();
