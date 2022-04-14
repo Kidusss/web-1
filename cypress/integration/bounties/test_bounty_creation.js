@@ -48,12 +48,9 @@ describe('Creating a new bounty', { tags: ['bounties'] }, () => {
         cy.get('#bounty_tags').find('.vs__search').type(tag + '{enter}');
       }
     });
-    cy.get('#bounty_tags').find('.vs__search').click();
 
-    cy.get('#experience_level').find('.vs__search').click();
-    cy.contains('Beginner').click();
-    cy.get('#project_length').find('.vs__search').click();
-    cy.contains('Hours').click();
+    cy.get('#experience_level').find('.vs__search').click().type('Beginner{enter}');
+    cy.get('#project_length').find('.vs__search').click().type('Hours{enter}');
 
     cy.contains('Next').click();
 

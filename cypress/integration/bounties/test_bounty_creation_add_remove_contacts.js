@@ -29,6 +29,22 @@ describe('Creating adding & removing contacts in new bounty', { tags: ['bounties
     cy.wait(1000);
 
     // Screen 1
+    cy.contains('Feature').click();
+    cy.get('#bounty_tags').find('.vs__search').click();
+
+    let tags = [ 'Python', 'Lua', 'Web Assembly' ];
+
+    tags.forEach(tag => {
+      if (tag === 'Python') {
+        cy.contains(tag).click();
+      } else {
+        cy.get('#bounty_tags').find('.vs__search').type(tag + '{enter}');
+      }
+    });
+
+    cy.get('#experience_level').find('.vs__search').click().type('Beginner{enter}');
+    cy.get('#project_length').find('.vs__search').click().type('Hours{enter}');
+
     cy.contains('Next').click();
 
     // Screen 2
