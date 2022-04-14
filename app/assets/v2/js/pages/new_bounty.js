@@ -270,6 +270,98 @@ Vue.mixin({
 
       return validateWalletAddress(vm.chainId, vm.form.funderAddress);
     },
+    checkFormStep1: function() {
+      let vm = this;
+
+      ret = {};
+
+      console.log('geri - checkFormStep1 vm.step1Submitted', vm.step1Submitted);
+      if (vm.step1Submitted) {
+        if (!vm.form.experience_level) {
+          ret['experience_level'] = 'Please select the experience level';
+        }
+        if (!vm.form.project_length) {
+          ret['project_length'] = 'Please select the project length';
+        }
+        if (!vm.form.bounty_type) {
+          ret['bounty_type'] = 'Please select the bounty type';
+        }
+        if (vm.form.bounty_categories.length < 1) {
+          ret['bounty_categories'] = 'Select at least one category';
+        }
+      }
+
+      console.log('geri - checkFormStep1 ret', ret);
+      return ret;
+    },
+
+    checkFormStep2: function() {
+      let vm = this;
+
+      ret = {};
+
+      console.log('geri - checkFormStep2 vm.step2Submitted', vm.step2Submitted);
+      if (vm.step2Submitted) {
+        if (!vm.form.bountyInformationSource) {
+          ret['bountyInformationSource'] = 'Select the bounty information source';
+        } else if (vm.form.bountyInformationSource === '0') {
+          if (!vm.form.issueDetails || vm.form.issueDetails < 1) {
+            ret['issueDetails'] = 'Please input a GitHub issue';
+          }
+        } else {
+          if (!vm.form.title) {
+            ret['title'] = 'Please input bounty title';
+          }
+
+          if (!vm.form.description) {
+            ret['description'] = 'Please input bounty description';
+          }
+        }
+      }
+
+      console.log('geri - checkFormStep2 ret', ret);
+      return ret;
+    },
+
+    checkFormStep3: function() {
+      let vm = this;
+
+      ret = {};
+
+      console.log('geri - checkFormStep3 vm.step3Submitted', vm.step3Submitted);
+      if (vm.step3Submitted) {
+        if (!vm.chainId) {
+          ret['chainId'] = 'Please select a chain';
+        }
+
+        // if (!vm.form.token) {
+        //   ret['token'] = 'Please select a token';
+        // }
+      }
+
+      console.log('geri - checkFormStep3 ret', ret);
+      return ret;
+    },
+
+    checkFormStep4: function() {
+      let vm = this;
+
+      ret = {};
+
+      console.log('geri - checkFormStep4 vm.step4Submitted', vm.step4Submitted);
+      if (vm.step4Submitted) {
+        if (!vm.form.project_type) {
+          ret['project_type'] = 'Select the project type';
+        }
+        if (!vm.form.permission_type) {
+          ret['permission_type'] = 'Select the permission type';
+        }
+      }
+
+      console.log('geri - checkFormStep4 ret', ret);
+      return ret;
+    },
+
     checkForm: async function() {
       console.log('geri - checkForm');
       let vm = this;
@@ -291,22 +383,6 @@ Vue.mixin({
         vm.$set(vm.errors, 'bounty_type', 'Please select the bounty type');
       }
 
-
-      if (!vm.form.bountyInformationSource) {
-        vm.$set(vm.errors, 'bountyInformationSource', 'Select the bounty information source');
-      } else if (vm.form.bountyInformationSource === '0') {
-        if (!vm.form.issueDetails || vm.form.issueDetails < 1) {
-          vm.$set(vm.errors, 'issueDetails', 'Please input a GitHub issue');
-        }
-      } else {
-        if (!vm.form.title) {
-          vm.$set(vm.errors, 'title', 'Please input bounty title');
-        }
-
-        if (!vm.form.description) {
-          vm.$set(vm.errors, 'description', 'Please input bounty description');
-        }
-      }
 
       if (!vm.chainId) {
         vm.$set(vm.errors, 'chainId', 'Please select an option');
@@ -799,12 +875,44 @@ Vue.mixin({
       console.log('geri updateNav ', direction, this.step, this.currentSteps.length);
       if (direction === 1) {
         // Forward navigation
-        if (this.step === this.currentSteps.length) {
-          console.log('geri - updateNav - submitting ...');
-          this.submitForm();
-          return;
+        console.log('geri updateNav 2');
+        let errors = {};
+
+        switch (this.step) {
+          case 1:
+            console.log('geri updateNav 3');
+            this.step1Submitted = true;
+            errors = this.checkFormStep1();
+            console.log('geri updateNav 4', errors);
+            break;
+          case 2:
+            console.log('geri updateNav 5');
+            this.step2Submitted = true;
+            errors = this.checkFormStep2();
+            console.log('geri updateNav 6', errors);
+            break;
+          case 3:
+            console.log('geri updateNav 7');
+            this.step3Submitted = true;
+            errors = this.checkFormStep3();
+            console.log('geri updateNav 8', errors);
+            break;
+          case 4:
+            console.log('geri updateNav 9');
+            this.step4Submitted = true;
+            errors = this.checkFormStep4();
+            console.log('geri updateNav 10', errors);
+            break;
+          default:
+            console.log('geri - updateNav - submitting ...');
+            this.submitForm();
+            return;
         }
-        this.step += 1;
+        console.log('geri - updateNav errors', errors);
+        if (Object.keys(errors).length == 0) {
+          console.log('geri - updateNav NO ERRORS');
+          this.step += 1;
+        }
       } else if (this.step > 1) {
         // Backward navigation
         this.step -= 1;
@@ -965,6 +1073,46 @@ Vue.mixin({
     },
     expiresAfterAYear: function() {
       return moment().diff(this.form.expirationTimeDelta, 'years') < -1;
+    },
+    step1Errors: function() {
+      console.log('geri - step1Errors');
+      return this.checkFormStep1();
+    },
+    isStep1Valid: function() {
+      let ret = Object.keys(this.step1Errors).length == 0;
+
+      console.log('geri - isStep1Valid ret', ret);
+      return ret;
+    },
+    step2Errors: function() {
+      console.log('geri - step2Errors');
+      return this.checkFormStep2();
+    },
+    isStep2Valid: function() {
+      let ret = Object.keys(this.step2Errors).length == 0;
+
+      console.log('geri - isStep2Valid ret', ret);
+      return ret;
+    },
+    step3Errors: function() {
+      console.log('geri - step3Errors');
+      return this.checkFormStep3();
+    },
+    isStep3Valid: function() {
+      let ret = Object.keys(this.step3Errors).length == 0;
+
+      console.log('geri - isStep3Valid ret', ret);
+      return ret;
+    },
+    step4Errors: function() {
+      console.log('geri - step4Errors');
+      return this.checkFormStep4();
+    },
+    isStep4Valid: function() {
+      let ret = Object.keys(this.step4Errors).length == 0;
+
+      console.log('geri - isStep4Valid ret', ret);
+      return ret;
     }
   },
   watch: {
@@ -1021,7 +1169,11 @@ if (document.getElementById('gc-hackathon-new-bounty')) {
         ethFeaturedPrice: null,
         blockedUrls: document.blocked_urls,
         dirty: false,
-        submitted: false,
+        submitted: true, //   TODO geri: remove this??? If we remove this v-selects don't get the red border any more
+        step1Submitted: false,
+        step2Submitted: false,
+        step3Submitted: false,
+        step4Submitted: false,
         form: {
           expirationTimeDelta: moment().add(1, 'month'),
           payoutDate: moment().add(1, 'month'),
@@ -1048,7 +1200,7 @@ if (document.getElementById('gc-hackathon-new-bounty')) {
           feeTxId: null,
           couponCode: document.coupon_code,
           tags: [],
-          bountyType: null,
+          bounty_type: null,
           bountyInformationSource: null,
           contactDetails: [{
             type: '',

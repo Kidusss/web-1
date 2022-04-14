@@ -6059,13 +6059,12 @@ def create_bounty_v1(request):
         return JsonResponse(response)
 
     github_url = request.POST.get("github_url", None)
-    # TODO geri: uncomment below code
-    # if Bounty.objects.filter(github_url=github_url, network=network).exists():
-    #     response = {
-    #         'status': 303,
-    #         'message': 'bounty already exists for this github issue'
-    #     }
-    #     return JsonResponse(response)
+    if Bounty.objects.filter(github_url=github_url, network=network).exists():
+        response = {
+            'status': 303,
+            'message': 'bounty already exists for this github issue'
+        }
+        return JsonResponse(response)
 
     bounty = Bounty()
 

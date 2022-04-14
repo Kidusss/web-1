@@ -413,7 +413,7 @@ class Bounty(SuperModel):
     objects = BountyQuerySet.as_manager()
 
     # Aray of strings, for example: ["HTMK", "CSS"]
-    tags = JSONField(default=list, blank=True)
+    # tags = JSONField(default=list, blank=True) TODO geri we do not need this, tags are the categories
 
     # contact details shall be an array of structures like:
     #   {type: 'discord', value: 'dhandle'}, {type: 'telegram',value: '@thandle'}]
