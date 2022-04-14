@@ -21,7 +21,7 @@ describe('Creating a new bounty', { tags: ['bounties'] }, () => {
     cy.url().should('contain', 'bounty/new');
   });
 
-  it('can create a new bounty', () => {
+  it.only('can create a new bounty', () => {
     cy.visit('bounty/new');
 
     // unfortunately some of the events do not seem bound in time for this
@@ -56,7 +56,29 @@ describe('Creating a new bounty', { tags: ['bounties'] }, () => {
 
     // Screen 2
     cy.contains('Import from GitHub').click();
-    cy.get('#new-bounty-issue-url').type('https://github.com/gitcoinco/web/issues/1');
+
+    cy.intercept('/sync/get_issue_details*', {
+      body: {
+        'keywords': [
+          'JavaScript',
+          'HTML',
+          'CSS',
+          'Shell'
+        ],
+        'title': 'Bounty title',
+        'body': 'Test validate address 3\r\n- step 1: do this\r\n- step 2: do that\r\n\r\n!!! **Note**: _This is very important_ ',
+        'description': 'Test validate address 3\r- step 1: do this\r- step 2: do that\r\r!!! **Note**: _This is very important_',
+        'state': 'open'
+      }
+    }).as('getIssueDetails');
+
+    function randomInt() {
+      return Math.floor(Math.random() * 1000000000);
+    }
+
+    cy.get('#new-bounty-issue-url').type(`https://github.com/gitcoinco/web_${randomInt()}/issues/${randomInt()}`);
+    cy.wait('@getIssueDetails');
+
     cy.get('#new-bounty-acceptace-criteria').type('Custom bounty acceptance criteria');
     cy.get('#new-bounty-resources').type('Custom bounty resource');
     cy.get('#new-bounty-organisation-url').type('https://github.com/gitcoinco/');
@@ -127,12 +149,15 @@ describe('Creating a new bounty', { tags: ['bounties'] }, () => {
     cy.contains('Confirm').click();
 
 
+    // cy.intercept('/issue/*').as('issueDetailsPage');
+
+    // cy.wait('@issueDetailsPage');
     // Verify that the redirect happened
-    cy.url().should('include', '/issue/');
+    cy.url({ timeout: 20000 }).should('include', '/issue/');
 
     // cy.contains('Time Left').parent().contains();
-    cy.log('Opened', cy.contains('Opened'));
-    cy.log('Opened', cy.contains('Opened').parent());
+    // cy.log('Opened', cy.contains('Opened'));
+    // cy.log('Opened', cy.contains('Opened').parent());
     // cy.log('Opened', cy.contains('Opened').parent().contains('Few Seconds Ago'));
     // cy.contains('Opened').parent().contains('Few Seconds Ago');
     // cy.get('#bounty_type').contains('Improvement');
