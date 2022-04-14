@@ -1,5 +1,5 @@
 <form-wrapper v-if="step === 3" :heading="'Payment Information'" :current-step="step" :total-steps="currentSteps.length"
-  @update-navigation="updateNav">
+  @update-navigation="updateNav" :disable-confirm="!isStep3Valid">
 
   <!-- Chain -->
   <div class="mb-4">
@@ -9,7 +9,7 @@
       <template #search="{attributes, events}">
         <input
           class="vs__search"
-          :required="!form.tags"
+          :required="step3Submitted && !chain"
           v-bind="attributes"
           v-on="events"
         />
@@ -23,7 +23,10 @@
         [[ label ]]
       </template>
     </v-select>
-  </div>
+    <div class="text-danger" v-if="step3Errors.chainId && !chain">
+      [[ step3Errors.chainId ]]
+    </div>
+</div>
 
   <!-- Token -->
   <div class="mb-4">

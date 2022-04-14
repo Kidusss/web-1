@@ -1,5 +1,5 @@
 <form-wrapper v-if="step === 4" :heading="'Additional Information'" :current-step="step"
-  :total-steps="currentSteps.length" @update-navigation="updateNav">
+  :total-steps="currentSteps.length" @update-navigation="updateNav" :disable-confirm="!isStep4Valid">
 
   <!-- Project Type -->
   <div class="mb-4">
@@ -29,6 +29,9 @@
         </label>
       </div>
     </div>
+    <div class="text-danger" v-if="step4Errors.project_type && !form.project_type">
+      [[step4Errors.project_type]]
+    </div>
   </div>
 
   <!-- Permissions -->
@@ -55,6 +58,9 @@
           </div>
         </label>
       </div>
+    </div>
+    <div class="text-danger" v-if="step4Errors.permission_type && !form.permission_type">
+      [[step4Errors.permission_type]]
     </div>
   </div>
 

@@ -137,7 +137,7 @@
     <div class="row">
       <div class="col-12 mt-2">
         <h5 class="bounty-heading mt-0 pt-4" id="description">{% trans "Description" %}</h5>
-        <div v-if="form.bountyInformationSource === '0'" class="issue_description" :inner-html.prop="form.issueDetails.description | markdownit"></div>
+        <div v-if="form.bountyInformationSource === '0'" class="issue_description" :inner-html.prop="(form.issueDetails ? form.issueDetails.description : '') | markdownit"></div>
         <div v-else class="issue_description" :inner-html.prop="form.richDescription | markdownit"></div>
       </div>
     </div>
