@@ -21,7 +21,7 @@ describe('Creating a new bounty', { tags: ['bounties'] }, () => {
     cy.url().should('contain', 'bounty/new');
   });
 
-  it.only('can create a new bounty', () => {
+  it('can create a new bounty', () => {
     cy.visit('bounty/new');
 
     // unfortunately some of the events do not seem bound in time for this
@@ -190,7 +190,7 @@ describe('Creating a new bounty', { tags: ['bounties'] }, () => {
     /*
      * Screen 1 - Other Bounty
      */
-    it('Should validated the mandatory fields on screen 1 ', () => {
+    it('Should validated the mandatory fields on screen when "Other" biounty type is selected 1 ', () => {
       cy.visit('bounty/new');
       cy.wait(1000);
 
