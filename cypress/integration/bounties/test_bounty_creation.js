@@ -21,7 +21,7 @@ describe('Creating a new bounty', { tags: ['bounties'] }, () => {
     cy.url().should('contain', 'bounty/new');
   });
 
-  it('can create a new bounty', () => {
+  it.skip('can create a new bounty', () => {
     cy.visit('bounty/new');
 
     // unfortunately some of the events do not seem bound in time for this
