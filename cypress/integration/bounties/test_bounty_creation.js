@@ -164,6 +164,121 @@ describe('Creating a new bounty', { tags: ['bounties'] }, () => {
     // cy.contains('Permission').parent().contains('Approval');
   });
 
+  it.skip('can create a new bounty with custom bounty type', () => {
+    let customBountyType = 'MySuperSpecialBounty';
+
+    cy.visit('bounty/new');
+    cy.wait(1000);
+
+    // Screen 1
+    cy.contains('Other').click();
+    cy.get('#new-bounty-type-other').type(customBountyType);
+
+    let tags = [ 'Python', 'Lua', 'Web Assembly' ];
+
+    tags.forEach(tag => {
+      if (tag === 'Python') {
+        cy.get('#bounty_tags').find('.vs__search').click();
+        cy.contains(tag).click();
+      } else {
+        cy.get('#bounty_tags').find('.vs__search').type(tag + '{enter}');
+      }
+    });
+
+    cy.get('#experience_level').find('.vs__search').click().type('Beginner{enter}');
+    cy.get('#project_length').find('.vs__search').click().type('Hours{enter}');
+
+    cy.contains('Next').click();
+
+    // Screen 2
+    cy.contains('Import from GitHub').click();
+
+    cy.intercept('/sync/get_issue_details*', {
+      body: {
+        'keywords': [
+          'JavaScript',
+          'HTML',
+          'CSS',
+          'Shell'
+        ],
+        'title': 'Bounty title',
+        'body': 'Test validate address 3\r\n- step 1: do this\r\n- step 2: do that\r\n\r\n!!! **Note**: _This is very important_ ',
+        'description': 'Test validate address 3\r- step 1: do this\r- step 2: do that\r\r!!! **Note**: _This is very important_',
+        'state': 'open'
+      }
+    }).as('getIssueDetails');
+
+    function randomInt() {
+      return Math.floor(Math.random() * 1000000000);
+    }
+
+    cy.get('#new-bounty-issue-url').type(`https://github.com/gitcoinco/web_${randomInt()}/issues/${randomInt()}`);
+    cy.wait('@getIssueDetails');
+
+    cy.get('#new-bounty-acceptace-criteria').type('Custom bounty acceptance criteria');
+    cy.get('#new-bounty-resources').type('Custom bounty resource');
+    cy.get('#new-bounty-organisation-url').type('https://github.com/gitcoinco/');
+
+    cy.get('.new-bounty-contact-details-form-0').find('.new-bounty-contact-type').find('.vs__search').click().type('Discord{enter}');
+    cy.get('.new-bounty-contact-details-form-0').find('.new-bounty-contact-value').clear().type('#myhandle289346');
+
+    // Add another row
+    cy.get('.new-bounty-contact-details-form-0').find('.new-bounty-btn-add-contact').click();
+    cy.get('.new-bounty-contact-details-form-1').find('.new-bounty-contact-type').find('.vs__search').click().type('Telegram{enter}');
+    cy.get('.new-bounty-contact-details-form-1').find('.new-bounty-contact-value').clear().type('telegram-user');
+
+    // Add another row
+    cy.get('.new-bounty-contact-details-form-1').find('.new-bounty-btn-add-contact').click();
+    cy.get('.new-bounty-contact-details-form-2').find('.new-bounty-contact-type').find('.vs__search').click().type('Mail{enter}');
+    cy.get('.new-bounty-contact-details-form-2').find('.new-bounty-contact-value').clear().type('my.demo.name@email.com');
+
+
+    cy.contains('Next').click();
+
+    // Screen 3
+    // cy.get('#payout_token').should('be.disabled');    TODO: this check does not work
+    cy.get('#usd_amount').should('be.disabled');
+    cy.get('#amount').should('be.disabled');
+    cy.get('#new_bounty_peg_to_usd').should('be.disabled');
+    cy.get('#bounty_owner').should('be.enabled');
+
+    cy.get('#payout_chain').find('.vs__search').click().type('ETH{enter}');
+    // cy.get('#payout_token').should('be.enabled');           TODO: this check does not work
+
+    cy.get('#payout_token').find('.vs__search').click().type('ETH{enter}');
+
+    cy.get('#usd_amount').should('be.enabled');
+    cy.get('#usd_amount').should('be.enabled');
+    cy.get('#new_bounty_peg_to_usd').should('be.enabled');
+
+    cy.get('#usd_amount').clear().type('123.34');
+
+    cy.contains('Next').click();
+
+    // Screen 4
+
+    cy.contains('Standard').click();
+    cy.contains('Approval Required').click();
+
+    cy.contains('Next').click();
+
+    // Screen 5
+
+    tags.forEach(tag => {
+      cy.contains(tag);
+    });
+
+    cy.get('#experience_level').contains('Beginner');
+    cy.get('#bounty_type').contains(customBountyType);
+
+    // Save and navigate to the details screen
+    cy.contains('Confirm').click();
+
+    // Verify that the redirect happened
+    cy.url().should('include', '/issue/');
+    cy.get('#experience_level').contains('Beginner');
+    cy.get('#bounty_type').contains(customBountyType);
+  });
 
   describe('Verify bounty field validation', () => {
     /*
