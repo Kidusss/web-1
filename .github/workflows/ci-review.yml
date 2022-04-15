@@ -186,16 +186,16 @@ jobs:
         ports:
           - 6379:6379
 
-      # gitoin:
-      #   image: gitcoin/web:0e5ab9b364
-      #   # Set health checks to wait until redis has started
-      #   options: >-
-      #     --health-cmd "curl http://127.0.0.1:8000"
-      #     --health-interval 10s
-      #     --health-timeout 5s
-      #     --health-retries 5
-      #   ports:
-      #     - 8000:8000
+      gitoin:
+        image: gitcoin/web:0e5ab9b364
+        # Set health checks to wait until redis has started
+        options: >-
+          --health-cmd "curl http://127.0.0.1:8000"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 8000:8000
           
     env:
       DJANGO_SETTINGS_MODULE: app.settings
