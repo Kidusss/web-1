@@ -148,12 +148,8 @@ describe('Creating a new bounty', { tags: ['bounties'] }, () => {
     // Save and navigate to the details screen
     cy.contains('Confirm').click();
 
-
-    // cy.intercept('/issue/*').as('issueDetailsPage');
-
-    // cy.wait('@issueDetailsPage');
     // Verify that the redirect happened
-    cy.url({ timeout: 20000 }).should('include', '/issue/');
+    cy.url().should('include', '/issue/');
 
     // cy.contains('Time Left').parent().contains();
     // cy.log('Opened', cy.contains('Opened'));
