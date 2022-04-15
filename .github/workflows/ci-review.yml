@@ -153,12 +153,12 @@ jobs:
 
   test:
     name: Test
-    needs: build
+    # needs: build
     # environment: review
     runs-on: ubuntu-latest
 
     services:
-      # # Label used to access the service container
+      # Label used to access the service container
       postgres:
         # Docker Hub image
         image: postgres:11.5
@@ -205,21 +205,21 @@ jobs:
       POLYGONSCAN_API_KEY: ${{ secrets.POLYGONSCAN_API_KEY }}
 
     # steps to perform in job
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    # steps:
+    #   - name: Checkout code
+    #     uses: actions/checkout@v2
 
-      - name: Run tests
-        uses: cypress-io/github-action@v2
-        with:
-          record: true
-          parallel: true
-          group: 'Actions example'
-          ci-build-id: '${{ github.sha }}-${{ github.workflow }}-${{ github.event_name }}'
-        env:
-          # pass the Dashboard record key as an environment variable
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #   - name: Run tests
+    #     uses: cypress-io/github-action@v2
+    #     with:
+    #       record: true
+    #       parallel: true
+    #       group: 'Actions example'
+    #       ci-build-id: '${{ github.sha }}-${{ github.workflow }}-${{ github.event_name }}'
+    #     env:
+    #       # pass the Dashboard record key as an environment variable
+    #       CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+    #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
 
 
