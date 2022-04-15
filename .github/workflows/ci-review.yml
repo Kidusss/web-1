@@ -153,7 +153,7 @@ jobs:
 
   test:
     name: Test
-    # needs: build-and-test
+    needs: build
     # environment: review
     runs-on: gitcoin/web:0e5ab9b364
 
