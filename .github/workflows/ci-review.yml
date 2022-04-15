@@ -157,8 +157,6 @@ jobs:
     environment: review
     runs-on: gitcoin/web:0e5ab9b364
 
-    name: Build and Test
-
     services:
       # # Label used to access the service container
       postgres:
