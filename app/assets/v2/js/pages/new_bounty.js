@@ -807,7 +807,7 @@ Vue.mixin({
         'value_in_token': vm.form.amount * 10 ** vm.form.token.decimals,
         'token_name': metadata.tokenName,
         'token_address': vm.form.token.address,
-        'bounty_type': metadata.bountyType,
+        'bounty_type': metadata.bountyType !== 'Other' ? metadata.bountyType : vm.form.bounty_type_other,
         'project_length': metadata.projectLength,
         'estimated_hours': metadata.estimatedHours,
         'experience_level': metadata.experienceLevel,

@@ -78,7 +78,7 @@
 
       <div v-if="form.bounty_type" class="col-12 col-sm-6 col-md-4 d-flex justify-content-between">
         <span class="bounty-info-heading">{% trans "Issue Type" %} </span>
-        <span class="bounty-info-text pr-sm-3 pr-md-5" id="bounty_type">[[ form.bounty_type ]]</span>
+        <span class="bounty-info-text pr-sm-3 pr-md-5" id="bounty_type">[[ form.bounty_type !== 'Other' ? form.bounty_type : form.bounty_type_other ]]</span>
       </div>
 
       <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-between" id="auto_approve_workers_wrapper"
