@@ -15,7 +15,7 @@ jobs:
     outputs:
       dockerTag: ${{ steps.compute.outputs.docker_tag }}
 
-    services:
+    # services:
       # # Label used to access the service container
       # postgres:
       #   # Docker Hub image
