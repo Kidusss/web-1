@@ -209,6 +209,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Setup DB - Run management commands
+        run: |
+          python app/manage.py migrate
+          python app/manage.py fetch_gas_prices
+
+      - name: Setup DB - Install fixtures
+        run: |
+          python3 app/manage.py loaddata "./app/app/fixtures/users.json"
+          python3 app/manage.py loaddata "./app/app/fixtures/profiles.json"
+          python3 app/manage.py loaddata "./app/app/fixtures/economy.json"
+          python3 app/manage.py loaddata "./app/grants/fixtures/grant_types.json"
+
       - name: Run tests
         uses: cypress-io/github-action@v2
         with:
